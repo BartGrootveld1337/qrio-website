@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #2A9D8F;
+  --color-primary-dark: #238177;
+  --color-secondary: #1a2f38;
+  --color-background: #FAFBFC;
+  --color-accent: #E76F51;
+  --color-accent-light: #F4A261;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: Outfit, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans bg-background text-secondary antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+  
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-teal-400;
+  }
+  
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-teal-500;
+  }
+  
+  .bg-gradient-dark {
+    @apply bg-gradient-to-br from-secondary via-secondary to-slate-800;
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 40px -10px rgba(42, 157, 143, 0.4);
+  }
+  
+  .shadow-glow-lg {
+    box-shadow: 0 0 60px -15px rgba(42, 157, 143, 0.5);
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite 2s;
+  }
+  
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
