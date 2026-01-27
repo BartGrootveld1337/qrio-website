@@ -10,10 +10,10 @@ const PrivacyPolicy = () => {
           <h1 className="text-4xl font-bold mb-8">Privacybeleid</h1>
           <div className="prose prose-lg text-gray-600">
             <p className="mb-4">Laatst bijgewerkt: 11 december 2025</p>
-            
+
             <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">1. Inleiding</h2>
             <p className="mb-4">
-              Qrio ("wij", "ons" of "onze") respecteert uw privacy en zet zich in voor de bescherming van uw persoonsgegevens. 
+              Qrio ("wij", "ons" of "onze") respecteert uw privacy en zet zich in voor de bescherming van uw persoonsgegevens.
               Dit privacybeleid informeert u over hoe wij omgaan met uw persoonsgegevens wanneer u onze website bezoekt of gebruik maakt van onze diensten.
             </p>
 
@@ -33,24 +33,39 @@ const PrivacyPolicy = () => {
               Wij gebruiken uw persoonsgegevens alleen wanneer de wet ons dat toestaat. Meestal gebruiken wij uw persoonsgegevens in de volgende omstandigheden:
             </p>
             <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Om contact met u op te nemen naar aanleiding van uw aanvraag.</li>
               <li>Om onze diensten aan u te leveren.</li>
               <li>Om onze website, producten/diensten, marketing en klantrelaties te verbeteren.</li>
             </ul>
 
-            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">4. Gegevensbeveiliging</h2>
+            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">4. Cookies en Tracking</h2>
             <p className="mb-4">
-              Wij hebben passende beveiligingsmaatregelen genomen om te voorkomen dat uw persoonsgegevens per ongeluk verloren gaan, 
+              Onze website maakt gebruik van cookies en vergelijkbare technologieën om uw ervaring te verbeteren en anonieme statistieken te verzamelen.
+            </p>
+            <h3 className="text-xl font-semibold text-secondary mt-4 mb-2">4.1 Google Analytics & Ads</h3>
+            <p className="mb-4">
+              Wij gebruiken Google Analytics en Google Ads om inzicht te krijgen in hoe bezoekers onze website gebruiken en om onze marketingcampagnes te optimaliseren.
+              Hierbij worden o.a. IP-adressen (geanonimiseerd) en gegevens over uw browser en apparaat verwerkt.
+            </p>
+            <h3 className="text-xl font-semibold text-secondary mt-4 mb-2">4.2 Toestemming beheren</h3>
+            <p className="mb-4">
+              Bij uw eerste bezoek vragen wij toestemming voor het plaatsen van deze cookies via onze cookiebanner.
+              U kunt uw keuze op elk moment wijzigen door uw browsercache te wissen of onze cookie-instellingen te resetten.
+              Zonder uw toestemming worden er geen marketing- of analytische cookies geplaatst.
+            </p>
+
+            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">5. Gegevensbeveiliging</h2>
+            <p className="mb-4">
+              Wij hebben passende beveiligingsmaatregelen genomen om te voorkomen dat uw persoonsgegevens per ongeluk verloren gaan,
               gebruikt of geopend worden op een ongeoorloofde manier, gewijzigd of openbaar gemaakt worden.
             </p>
 
-            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">5. Uw rechten</h2>
+            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">6. Uw rechten</h2>
             <p className="mb-4">
-              Onder bepaalde omstandigheden hebt u rechten op grond van de wetgeving inzake gegevensbescherming met betrekking tot uw persoonsgegevens, 
+              Onder bepaalde omstandigheden hebt u rechten op grond van de wetgeving inzake gegevensbescherming met betrekking tot uw persoonsgegevens,
               waaronder het recht op inzage, correctie, wissing, beperking van verwerking en overdraagbaarheid van gegevens.
             </p>
 
-            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">6. Contact</h2>
+            <h2 className="text-2xl font-bold text-secondary mt-8 mb-4">7. Contact</h2>
             <p className="mb-4">
               Als u vragen hebt over dit privacybeleid of onze privacypraktijken, neem dan contact met ons op via: hello@qrio.nl.
             </p>

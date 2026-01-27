@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import ScrollToTop from './components/ScrollToTop';
+import Analytics from './components/Analytics';
 import { Loader2 } from 'lucide-react';
+import { CookieProvider } from './context/CookieContext';
+import CookieBanner from './components/CookieBanner';
 
 // Lazy load pages for better performance
 const LandingPage = lazy(() => import('./LandingPage'));
@@ -35,35 +38,39 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/voorwaarden" element={<Terms />} />
-          <Route path="/ai-act" element={<AIAct />} />
-          <Route path="/bedrijfsleven" element={<Business />} />
-          <Route path="/overheid" element={<Government />} />
-          <Route path="/onderwijs" element={<Education />} />
-          <Route path="/zorg" element={<Healthcare />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/bedankt" element={<ThankYou />} />
-          <Route path="/dpa" element={<DPA />} />
-          <Route path="/cookies" element={<CookiePolicy />} />
-          <Route path="/over-ons" element={<About />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blogs/:slug" element={<BlogPost />} />
-          
-          {/* SEO Landing Pages */}
-          <Route path="/ai-act-scholingsplicht" element={<AIActScholingsplicht />} />
-          <Route path="/ai-training-medewerkers" element={<AITrainingMedewerkers />} />
-          <Route path="/copilot-training" element={<CopilotTraining />} />
-          <Route path="/chatgpt-beleid" element={<ChatGPTBeleid />} />
-          <Route path="/shadow-ai-voorkomen" element={<ShadowAI />} />
-        </Routes>
-      </Suspense>
-    </Router>
+    <CookieProvider>
+      <Router>
+        <ScrollToTop />
+        <Analytics />
+        <CookieBanner />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/voorwaarden" element={<Terms />} />
+            <Route path="/ai-act" element={<AIAct />} />
+            <Route path="/bedrijfsleven" element={<Business />} />
+            <Route path="/overheid" element={<Government />} />
+            <Route path="/onderwijs" element={<Education />} />
+            <Route path="/zorg" element={<Healthcare />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/bedankt" element={<ThankYou />} />
+            <Route path="/dpa" element={<DPA />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/over-ons" element={<About />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/:slug" element={<BlogPost />} />
+
+            {/* SEO Landing Pages */}
+            <Route path="/ai-act-scholingsplicht" element={<AIActScholingsplicht />} />
+            <Route path="/ai-training-medewerkers" element={<AITrainingMedewerkers />} />
+            <Route path="/copilot-training" element={<CopilotTraining />} />
+            <Route path="/chatgpt-beleid" element={<ChatGPTBeleid />} />
+            <Route path="/shadow-ai-voorkomen" element={<ShadowAI />} />
+          </Routes>
+        </Suspense>
+      </Router>
+    </CookieProvider>
   );
 }
 
