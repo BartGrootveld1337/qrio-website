@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Mail, MapPin, Send, Loader2, Sparkles, Building2, ChevronDown } from 'lucide-react';
+import { Mail, MapPin, Send, Loader2, Sparkles, Building2, Users, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const Contact = () => {
     phone: '',
     company: '',
     plan: '',
+    billingCycle: '',
     message: ''
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -22,16 +23,21 @@ const Contact = () => {
     // Check URL on mount
     const searchParams = new URLSearchParams(window.location.search);
     const planFromUrl = searchParams.get('plan');
+    const billingFromUrl = searchParams.get('billing');
     
-    if (planFromUrl && ['Professional', 'Enterprise'].includes(planFromUrl)) {
-      setFormData(prev => ({ ...prev, plan: planFromUrl }));
+    if (planFromUrl && ['Starter', 'Pro', 'Enterprise'].includes(planFromUrl)) {
+      setFormData(prev => ({ 
+        ...prev, 
+        plan: planFromUrl,
+        billingCycle: billingFromUrl || 'monthly'
+      }));
     }
 
     // Listen for custom event from Pricing component
-    const handlePlanSelected = (event: CustomEvent<{ plan: string }>) => {
-      const { plan } = event.detail;
-      if (['Professional', 'Enterprise'].includes(plan)) {
-        setFormData(prev => ({ ...prev, plan }));
+    const handlePlanSelected = (event: CustomEvent<{ plan: string; billingCycle: string; billingLabel: string }>) => {
+      const { plan, billingCycle } = event.detail;
+      if (['Starter', 'Pro', 'Enterprise'].includes(plan)) {
+        setFormData(prev => ({ ...prev, plan, billingCycle }));
       }
     };
 
@@ -53,6 +59,17 @@ const Contact = () => {
     try {
       // Gebruik FormSubmit voor het versturen van e-mails zonder backend
       // Zie: https://formsubmit.co/ajax/
+      const billingLabels: Record<string, string> = {
+        monthly: 'Maandelijks',
+        quarterly: 'Kwartaal',
+        semiannual: 'Halfjaarlijks',
+        annual: 'Jaarlijks'
+      };
+      const billingLabel = billingLabels[formData.billingCycle] || '';
+      const planInfo = formData.plan && formData.billingCycle 
+        ? `${formData.plan} (${billingLabel})` 
+        : formData.plan || '';
+      
       const response = await fetch('https://formsubmit.co/ajax/bartgrootveld@gmail.com', {
         method: 'POST',
         headers: {
@@ -61,8 +78,9 @@ const Contact = () => {
         },
         body: JSON.stringify({
           ...formData,
-          _subject: formData.plan 
-            ? `Offerte aanvraag ${formData.plan}: ${formData.company}`
+          planInfo, // Include formatted plan info
+          _subject: planInfo 
+            ? `Offerte aanvraag ${planInfo}: ${formData.company}`
             : `Nieuwe aanvraag via Qrio Website: ${formData.company}`,
           _template: 'table', // Zorgt voor een nette tabel in de e-mail
           _captcha: 'false'   // Zet captcha uit (optioneel, kan spam geven)
@@ -73,7 +91,7 @@ const Contact = () => {
 
       if (response.ok) {
         setStatus('success');
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', message: '' });
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', billingCycle: '', message: '' });
         navigate('/bedankt');
       } else {
         console.error('Submission error:', result);
@@ -216,7 +234,7 @@ const Contact = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="plan" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Interesse in</label>
+                  <label htmlFor="plan" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Interesse in plan</label>
                   <div className="relative">
                     <select
                       id="plan"
@@ -224,21 +242,53 @@ const Contact = () => {
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
                     >
-                      <option value="">Selecteer een optie (optioneel)</option>
-                      <option value="Professional">Professional - €2,50 per gebruiker/maand</option>
-                      <option value="Enterprise">Enterprise - Op maat</option>
+                      <option value="">Selecteer een plan (optioneel)</option>
+                      <option value="Starter">Starter</option>
+                      <option value="Pro">Pro</option>
+                      <option value="Enterprise">Enterprise</option>
                       <option value="Demo">Ik wil eerst een demo</option>
                       <option value="Overig">Overige vraag</option>
                     </select>
                     <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
-                  {formData.plan && formData.plan !== 'Overig' && formData.plan !== 'Demo' && (
-                    <div className="flex items-center gap-2 mt-2 px-3 py-2 bg-primary/5 rounded-lg border border-primary/20">
-                      {formData.plan === 'Professional' ? <Sparkles size={14} className="text-primary" /> : <Building2 size={14} className="text-primary" />}
-                      <span className="text-sm text-primary font-medium">Je vraagt een offerte aan voor {formData.plan}</span>
-                    </div>
-                  )}
                 </div>
+
+                {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && (
+                  <div className="space-y-1.5">
+                    <label htmlFor="billingCycle" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Facturatiecyclus</label>
+                    <div className="relative">
+                      <select
+                        id="billingCycle"
+                        value={formData.billingCycle}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
+                      >
+                        <option value="">Selecteer facturatiecyclus</option>
+                        <option value="monthly">Maandelijks</option>
+                        <option value="quarterly">Kwartaal</option>
+                        <option value="semiannual">Halfjaarlijks</option>
+                        <option value="annual">Jaarlijks</option>
+                      </select>
+                      <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+                )}
+
+                {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && formData.billingCycle && (
+                  <div className="flex items-center gap-2 px-3 py-2 bg-primary/5 rounded-lg border border-primary/20">
+                    {formData.plan === 'Starter' ? <Users size={14} className="text-primary" /> : 
+                     formData.plan === 'Pro' ? <Sparkles size={14} className="text-primary" /> : 
+                     <Building2 size={14} className="text-primary" />}
+                    <span className="text-sm text-primary font-medium">
+                      Je vraagt een offerte aan voor {formData.plan} ({
+                        formData.billingCycle === 'monthly' ? 'Maandelijks' :
+                        formData.billingCycle === 'quarterly' ? 'Kwartaal' :
+                        formData.billingCycle === 'semiannual' ? 'Halfjaarlijks' :
+                        'Jaarlijks'
+                      })
+                    </span>
+                  </div>
+                )}
 
                 <div className="space-y-1.5">
                   <label htmlFor="message" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Bericht (Optioneel)</label>

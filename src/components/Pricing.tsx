@@ -1,13 +1,20 @@
-import { Check, ArrowRight, Sparkles, Building2, Users } from 'lucide-react';
+import { useState } from 'react';
+import { Check, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { pricingPlans, type BillingCycle } from '../data/pricing';
 
 const Pricing = () => {
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
+
   const scrollToContactWithPlan = (planName: string) => {
-    // Update URL with plan parameter (for bookmarking/sharing)
-    window.history.pushState({}, '', `/?plan=${planName}`);
+    // Get the billing cycle label
+    const billingLabel = cycles.find(c => c.value === billingCycle)?.label || 'Maandelijks';
+    
+    // Update URL with plan and billing parameters (for bookmarking/sharing)
+    window.history.pushState({}, '', `/?plan=${planName}&billing=${billingCycle}`);
     
     // Dispatch custom event so Contact component can pick it up
-    window.dispatchEvent(new CustomEvent('planSelected', { detail: { plan: planName } }));
+    window.dispatchEvent(new CustomEvent('planSelected', { detail: { plan: planName, billingCycle, billingLabel } }));
     
     // Scroll to contact section
     const contactSection = document.getElementById('contact');
@@ -16,68 +23,11 @@ const Pricing = () => {
     }
   };
 
-  const plans = [
-    {
-      name: "Starter",
-      description: "Perfect om te starten met AI-geletterdheid",
-      price: "Gratis",
-      priceDetail: "tot 10 gebruikers",
-      features: [
-        "Basis AI-geletterdheid cursus",
-        "Toegang tot alle standaard modules",
-        "Gamification & streaks",
-        "Basis voortgangsrapportage",
-        "Community support",
-      ],
-      cta: "Start gratis",
-      ctaLink: "https://app.qrioapp.nl/signup-options",
-      isExternal: true,
-      highlighted: false,
-      icon: Users,
-    },
-    {
-      name: "Professional",
-      description: "Voor organisaties die serieus aan de slag gaan",
-      price: "€2,50",
-      priceDetail: "per gebruiker / maand",
-      yearlyNote: "Jaarlijks gefactureerd",
-      features: [
-        "Alles uit Starter, plus:",
-        "Onbeperkt gebruikers",
-        "EU AI Act Compliance module",
-        "Uitgebreid compliance dashboard",
-        "Certificaten & audit trail",
-        "Eigen branding optioneel",
-        "Priority email support",
-        "SSO (Microsoft Entra ID)",
-      ],
-      cta: "Vraag offerte aan",
-      ctaLink: "",
-      isExternal: false,
-      highlighted: true,
-      badge: "Meest gekozen",
-      icon: Sparkles,
-    },
-    {
-      name: "Enterprise",
-      description: "Voor grote organisaties met specifieke eisen",
-      price: "Op maat",
-      priceDetail: "neem contact op",
-      features: [
-        "Alles uit Professional, plus:",
-        "Onbeperkt eigen content & modules",
-        "Dedicated customer success manager",
-        "Custom integraties (API)",
-        "On-premise optie beschikbaar",
-        "SLA garanties",
-        "Training voor beheerders",
-      ],
-      cta: "Vraag offerte aan",
-      ctaLink: "",
-      isExternal: false,
-      highlighted: false,
-      icon: Building2,
-    }
+  const cycles: { value: BillingCycle; label: string }[] = [
+    { value: 'monthly', label: 'Maandelijks' },
+    { value: 'quarterly', label: 'Kwartaal' },
+    { value: 'semiannual', label: 'Halfjaarlijks' },
+    { value: 'annual', label: 'Jaarlijks' },
   ];
 
   return (
@@ -92,7 +42,7 @@ const Pricing = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6">
             <Sparkles size={16} />
@@ -102,34 +52,53 @@ const Pricing = () => {
             Kies het plan dat bij je past
           </h2>
           <p className="text-lg text-gray-600">
-            Start gratis, upgrade wanneer je wilt. Geen verrassingen, geen verborgen kosten.
+            Start vandaag nog met het verhogen van de AI-geletterdheid in jouw organisatie.
           </p>
         </motion.div>
 
+        {/* Tab Switcher */}
+        <div className="flex justify-center mb-16">
+          <div className="bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 inline-flex flex-wrap justify-center gap-1">
+            {cycles.map((cycle) => (
+              <button
+                key={cycle.value}
+                onClick={() => setBillingCycle(cycle.value)}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  billingCycle === cycle.value
+                    ? 'bg-primary text-white shadow-md'
+                    : 'text-gray-600 hover:text-primary hover:bg-gray-50'
+                }`}
+              >
+                {cycle.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {plans.map((plan, index) => (
+          {pricingPlans.map((plan, index) => (
             <motion.div 
-              key={plan.name}
+              key={plan.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -5 }}
               className={`relative bg-white rounded-3xl overflow-hidden flex flex-col transition-all duration-300 ${
-                plan.highlighted 
+                plan.popular 
                   ? 'shadow-2xl shadow-primary/20 border-2 border-primary ring-4 ring-primary/10' 
                   : 'shadow-lg border border-gray-100 hover:shadow-xl'
               }`}
             >
-              {plan.badge && (
+              {plan.popular && (
                 <div className="absolute top-0 left-0 right-0 bg-gradient-primary text-white text-center py-2 text-sm font-bold">
-                  {plan.badge}
+                  Meest gekozen
                 </div>
               )}
               
-              <div className={`p-8 ${plan.badge ? 'pt-14' : ''}`}>
+              <div className={`p-8 ${plan.popular ? 'pt-14' : ''}`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${plan.highlighted ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${plan.popular ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}>
                     <plan.icon size={20} />
                   </div>
                   <div>
@@ -141,25 +110,27 @@ const Pricing = () => {
                 
                 <div className="mb-6">
                   <div className="flex items-baseline gap-1">
-                    <span className={`text-4xl font-bold ${plan.highlighted ? 'text-primary' : 'text-secondary'}`}>
-                      {plan.price}
+                    <span className={`text-4xl font-bold ${plan.popular ? 'text-primary' : 'text-secondary'}`}>
+                      €{plan.price[billingCycle].toFixed(2).replace('.', ',')}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-500">{plan.priceDetail}</span>
-                  {plan.yearlyNote && (
-                    <p className="text-xs text-gray-400 mt-1">{plan.yearlyNote}</p>
-                  )}
+                  <div className="flex flex-col gap-1 mt-1">
+                    <span className="text-sm text-gray-500">{plan.priceDetail}</span>
+                    <span className="inline-block px-2 py-0.5 rounded-md bg-gray-100 text-xs font-medium text-gray-600 w-fit">
+                      Facturatie {cycles.find(c => c.value === billingCycle)?.label}
+                    </span>
+                  </div>
                 </div>
 
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <div className={`h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        plan.highlighted ? 'bg-primary/10 text-primary' : 'bg-green-50 text-green-600'
+                        plan.popular ? 'bg-primary/10 text-primary' : 'bg-green-50 text-green-600'
                       }`}>
                         <Check size={12} />
                       </div>
-                      <span className={`text-sm ${feature.includes('Alles uit') ? 'font-semibold text-secondary' : 'text-gray-600'}`}>
+                      <span className={`text-sm ${feature.includes('Alles uit') ? 'font-bold text-secondary' : 'text-gray-600'}`}>
                         {feature}
                       </span>
                     </li>
@@ -168,31 +139,23 @@ const Pricing = () => {
               </div>
               
               <div className="p-8 pt-0 mt-auto">
-                {plan.isExternal ? (
-                  <a 
-                    href={plan.ctaLink}
-                    className={`group flex items-center justify-center gap-2 w-full py-3.5 font-bold rounded-xl transition-all ${
-                      plan.highlighted
-                        ? 'bg-gradient-primary text-white shadow-lg shadow-primary/25 hover:shadow-xl'
-                        : 'bg-gray-100 text-secondary hover:bg-gray-200'
-                    }`}
-                  >
-                    {plan.cta}
-                    <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                  </a>
-                ) : (
-                  <button
-                    onClick={() => scrollToContactWithPlan(plan.name)}
-                    className={`group flex items-center justify-center gap-2 w-full py-3.5 font-bold rounded-xl transition-all cursor-pointer ${
-                      plan.highlighted
-                        ? 'bg-gradient-primary text-white shadow-lg shadow-primary/25 hover:shadow-xl'
-                        : 'bg-gray-100 text-secondary hover:bg-gray-200'
-                    }`}
-                  >
-                    {plan.cta}
-                    <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                )}
+                <button
+                  onClick={() => scrollToContactWithPlan(plan.name)}
+                  className={`group flex items-center justify-center gap-2 w-full py-3.5 font-bold rounded-xl transition-all cursor-pointer ${
+                    plan.popular
+                      ? 'bg-gradient-primary text-white shadow-lg shadow-primary/25 hover:shadow-xl'
+                      : 'bg-gray-100 text-secondary hover:bg-gray-200'
+                  }`}
+                >
+                  {plan.cta}
+                  <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                </button>
+                <a 
+                  href="https://app.qrioapp.nl/signup-options"
+                  className="block text-center mt-3 text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                >
+                  Probeer gratis
+                </a>
               </div>
             </motion.div>
           ))}
