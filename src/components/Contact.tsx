@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Mail, MapPin, Send, Loader2, Sparkles, Building2, Users, ChevronDown } from 'lucide-react';
+import { Mail, MapPin, Send, Loader2, Sparkles, Building2, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,29 +14,29 @@ const Contact = () => {
     company: '',
     plan: '',
     billingCycle: '',
-    message: ''
+    estimatedLicenses: '',
+    message: '',
+    agreedToTerms: false
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   // Read plan from URL parameter and listen for planSelected events
   useEffect(() => {
-    // Check URL on mount
     const searchParams = new URLSearchParams(window.location.search);
     const planFromUrl = searchParams.get('plan');
     const billingFromUrl = searchParams.get('billing');
     
-    if (planFromUrl && ['Starter', 'Pro', 'Enterprise'].includes(planFromUrl)) {
+    if (planFromUrl && ['Pro for Business', 'Enterprise for Business'].includes(planFromUrl)) {
       setFormData(prev => ({ 
         ...prev, 
         plan: planFromUrl,
-        billingCycle: billingFromUrl || 'monthly'
+        billingCycle: billingFromUrl || 'annual'
       }));
     }
 
-    // Listen for custom event from Pricing component
     const handlePlanSelected = (event: CustomEvent<{ plan: string; billingCycle: string; billingLabel: string }>) => {
       const { plan, billingCycle } = event.detail;
-      if (['Starter', 'Pro', 'Enterprise'].includes(plan)) {
+      if (['Pro for Business', 'Enterprise for Business'].includes(plan)) {
         setFormData(prev => ({ ...prev, plan, billingCycle }));
       }
     };
@@ -57,10 +57,7 @@ const Contact = () => {
     setStatus('submitting');
 
     try {
-      // Gebruik FormSubmit voor het versturen van e-mails zonder backend
-      // Zie: https://formsubmit.co/ajax/
       const billingLabels: Record<string, string> = {
-        monthly: 'Maandelijks',
         quarterly: 'Kwartaal',
         semiannual: 'Halfjaarlijks',
         annual: 'Jaarlijks'
@@ -70,28 +67,55 @@ const Contact = () => {
         ? `${formData.plan} (${billingLabel})` 
         : formData.plan || '';
       
-      const response = await fetch('https://formsubmit.co/ajax/bartgrootveld@gmail.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          ...formData,
-          planInfo, // Include formatted plan info
-          _subject: planInfo 
-            ? `Offerte aanvraag ${planInfo}: ${formData.company}`
-            : `Nieuwe aanvraag via Qrio Website: ${formData.company}`,
-          _template: 'table', // Zorgt voor een nette tabel in de e-mail
-          _captcha: 'false'   // Zet captcha uit (optioneel, kan spam geven)
+      // Send to both FormSubmit (email) and our edge function (database)
+      const [response] = await Promise.all([
+        fetch('https://formsubmit.co/ajax/bartgrootveld@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+            company: formData.company,
+            plan: formData.plan,
+            billingCycle: formData.billingCycle,
+            estimatedLicenses: formData.estimatedLicenses,
+            message: formData.message,
+            planInfo,
+            _subject: planInfo 
+              ? `Nieuwe aanvraag ${planInfo}: ${formData.company}`
+              : `Nieuwe aanvraag via Qrio Website: ${formData.company}`,
+            _template: 'table',
+            _captcha: 'false'
+          }),
         }),
-      });
+        // Store lead in database (fire-and-forget, don't block form submission)
+        fetch('https://twdmwcbfhawicoactypy.supabase.co/functions/v1/notify-new-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            company_name: formData.company,
+            contact_name: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+            phone: formData.phone,
+            plan_interest: formData.plan,
+            billing_cycle: formData.billingCycle,
+            estimated_licenses: formData.estimatedLicenses ? parseInt(formData.estimatedLicenses) : null,
+            message: formData.message,
+            source: 'website',
+          }),
+        }).catch(() => { /* silently ignore if edge function fails */ }),
+      ]);
 
       const result = await response.json();
 
       if (response.ok) {
         setStatus('success');
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', billingCycle: '', message: '' });
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', billingCycle: '', estimatedLicenses: '', message: '', agreedToTerms: false });
         navigate('/bedankt');
       } else {
         console.error('Submission error:', result);
@@ -242,10 +266,9 @@ const Contact = () => {
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
                     >
-                      <option value="">Selecteer een plan (optioneel)</option>
-                      <option value="Starter">Starter</option>
-                      <option value="Pro">Pro</option>
-                      <option value="Enterprise">Enterprise</option>
+                      <option value="">Selecteer een plan</option>
+                      <option value="Pro for Business">Pro for Business</option>
+                      <option value="Enterprise for Business">Enterprise for Business</option>
                       <option value="Demo">Ik wil eerst een demo</option>
                       <option value="Overig">Overige vraag</option>
                     </select>
@@ -254,38 +277,51 @@ const Contact = () => {
                 </div>
 
                 {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && (
-                  <div className="space-y-1.5">
-                    <label htmlFor="billingCycle" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Facturatiecyclus</label>
-                    <div className="relative">
-                      <select
-                        id="billingCycle"
-                        value={formData.billingCycle}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
-                      >
-                        <option value="">Selecteer facturatiecyclus</option>
-                        <option value="monthly">Maandelijks</option>
-                        <option value="quarterly">Kwartaal</option>
-                        <option value="semiannual">Halfjaarlijks</option>
-                        <option value="annual">Jaarlijks</option>
-                      </select>
-                      <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  <>
+                    <div className="space-y-1.5">
+                      <label htmlFor="billingCycle" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Gewenste facturatiecyclus</label>
+                      <div className="relative">
+                        <select
+                          id="billingCycle"
+                          value={formData.billingCycle}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
+                        >
+                          <option value="">Selecteer facturatiecyclus</option>
+                          <option value="quarterly">Per kwartaal</option>
+                          <option value="semiannual">Halfjaarlijks</option>
+                          <option value="annual">Jaarlijks</option>
+                        </select>
+                        <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                      </div>
                     </div>
-                  </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="estimatedLicenses" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Geschat aantal licenties</label>
+                      <input
+                        type="number"
+                        id="estimatedLicenses"
+                        min="1"
+                        value={formData.estimatedLicenses}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
+                        placeholder="Bijv. 25"
+                      />
+                    </div>
+                  </>
                 )}
 
                 {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && formData.billingCycle && (
                   <div className="flex items-center gap-2 px-3 py-2 bg-primary/5 rounded-lg border border-primary/20">
-                    {formData.plan === 'Starter' ? <Users size={14} className="text-primary" /> : 
-                     formData.plan === 'Pro' ? <Sparkles size={14} className="text-primary" /> : 
+                    {formData.plan.includes('Pro') ? <Sparkles size={14} className="text-primary" /> : 
                      <Building2 size={14} className="text-primary" />}
                     <span className="text-sm text-primary font-medium">
-                      Je vraagt een offerte aan voor {formData.plan} ({
-                        formData.billingCycle === 'monthly' ? 'Maandelijks' :
-                        formData.billingCycle === 'quarterly' ? 'Kwartaal' :
+                      {formData.plan} &mdash; {
+                        formData.billingCycle === 'quarterly' ? 'Per kwartaal' :
                         formData.billingCycle === 'semiannual' ? 'Halfjaarlijks' :
                         'Jaarlijks'
-                      })
+                      }
+                      {formData.estimatedLicenses ? ` — ${formData.estimatedLicenses} licenties` : ''}
                     </span>
                   </div>
                 )}
@@ -302,9 +338,24 @@ const Contact = () => {
                   ></textarea>
                 </div>
 
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="agreedToTerms"
+                    checked={formData.agreedToTerms}
+                    onChange={(e) => setFormData({ ...formData, agreedToTerms: e.target.checked })}
+                    required
+                    className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20"
+                  />
+                  <label htmlFor="agreedToTerms" className="text-xs text-gray-500">
+                    Ik ga akkoord met de{' '}
+                    <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">algemene voorwaarden</a>
+                  </label>
+                </div>
+
                 <button 
                   type="submit" 
-                  disabled={status === 'submitting'}
+                  disabled={status === 'submitting' || !formData.agreedToTerms}
                   className="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 shadow-lg shadow-primary/25 mt-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none focus:ring-4 focus:ring-primary/50 focus:outline-none"
                 >
                   {status === 'submitting' ? (
@@ -315,7 +366,7 @@ const Contact = () => {
                   ) : (
                     <>
                       <Send size={18} />
-                      Verstuur Bericht
+                      Verstuur aanvraag
                     </>
                   )}
                 </button>

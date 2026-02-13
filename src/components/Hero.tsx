@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle, Shield, Zap, Award, TrendingUp, Play, FileText } from 'lucide-react';
+import { ArrowRight, CheckCircle, Shield, Zap, Award, TrendingUp, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeroProps {
@@ -13,17 +13,17 @@ interface HeroProps {
 const Hero = ({
   title = <>Maak je team <span className="text-gradient">AI-vaardig</span> en compliant in 5 minuten per dag</>,
   subtitle = "De slimme leeroplossing die medewerkers traint in veilig en effectief AI-gebruik. Voldoe aan de EU AI Act, voorkom datalekken en boost productiviteit.",
-  ctaText = "Start gratis proefperiode",
-  ctaLink = "https://app.qrioapp.nl/signup-options",
-  secondaryCtaText = "Vraag offerte aan",
-  secondaryCtaLink = "#contact"
+  ctaText = "Bekijk onze plannen",
+  ctaLink = "#pricing",
+  secondaryCtaText = "Start gratis",
+  secondaryCtaLink = "https://app.qrioapp.nl/signup-options"
 }: HeroProps) => {
 
-  const scrollToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -121,6 +121,7 @@ const Hero = ({
             >
               <motion.a 
                 href={ctaLink}
+                onClick={ctaLink.startsWith('#') ? (e: React.MouseEvent<HTMLAnchorElement>) => scrollToSection(e, ctaLink.substring(1)) : undefined}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="group px-8 py-4 bg-gradient-primary text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 inline-flex items-center justify-center gap-2"
@@ -130,12 +131,11 @@ const Hero = ({
               </motion.a>
               <motion.a 
                 href={secondaryCtaLink}
-                onClick={secondaryCtaLink === '#contact' ? scrollToContact : undefined}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-8 py-4 bg-white text-secondary border-2 border-gray-200 font-bold rounded-xl hover:border-primary hover:text-primary transition-all inline-flex items-center justify-center gap-2"
               >
-                <FileText size={18} />
+                <ArrowRight size={18} />
                 {secondaryCtaText}
               </motion.a>
             </motion.div>

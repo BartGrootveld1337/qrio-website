@@ -29,6 +29,7 @@ const AITrainingMedewerkers = lazy(() => import('./pages/AITrainingMedewerkers')
 const CopilotTraining = lazy(() => import('./pages/CopilotTraining'));
 const ChatGPTBeleid = lazy(() => import('./pages/ChatGPTBeleid'));
 const ShadowAI = lazy(() => import('./pages/ShadowAI'));
+const AppDownload = lazy(() => import('./pages/AppDownload'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -67,6 +68,7 @@ function App() {
             <Route path="/copilot-training" element={<CopilotTraining />} />
             <Route path="/chatgpt-beleid" element={<ChatGPTBeleid />} />
             <Route path="/shadow-ai-voorkomen" element={<ShadowAI />} />
+            <Route path="/app" element={<AppDownload />} />
           </Routes>
         </Suspense>
       </Router>

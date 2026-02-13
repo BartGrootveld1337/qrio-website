@@ -14,6 +14,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Product', href: '/product' },
     { name: 'AI Act', href: '/ai-act' },
+    { name: 'Prijzen', href: '/#pricing' },
     { name: 'Blogs', href: '/blogs' },
     { 
       name: 'Sectoren', 
@@ -196,7 +197,7 @@ const Navbar = () => {
               href="https://app.qrioapp.nl/signup-options" 
               className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-primary text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-primary/25 transition-all"
             >
-              Probeer gratis
+              Start gratis
               <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
             </a>
           </div>
@@ -264,7 +265,7 @@ const Navbar = () => {
                   href="https://app.qrioapp.nl/signup-options"
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-primary text-white font-semibold rounded-xl shadow-lg shadow-primary/20"
                 >
-                  Probeer gratis
+                  Start gratis
                   <ArrowRight size={16} />
                 </a>
               </div>
