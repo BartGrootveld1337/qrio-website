@@ -42,7 +42,7 @@ const LandingPage = () => {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "EUR",
-          "description": "Gratis proefperiode"
+          "description": "Eerste module gratis"
         },
         "aggregateRating": {
           "@type": "AggregateRating",

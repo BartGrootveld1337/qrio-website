@@ -37,6 +37,7 @@ export const pricingPlans: Plan[] = [
     },
     priceDetail: "per licentie / maand",
     features: [
+      "Eerste module gratis",
       "Toegang tot basiscursussen",
       "Prompt bibliotheek",
       "Kennisbank",

@@ -12,7 +12,7 @@ interface CTABannerProps {
 const CTABanner = ({
   title = "Klaar om je organisatie AI-ready te maken?",
   subtitle = "Start vandaag nog met de AI-training die echt werkt. Geen lange implementatietrajecten, direct resultaat.",
-  ctaText = "Start gratis proefperiode",
+  ctaText = "Start gratis",
   ctaLink = "https://app.qrioapp.nl/signup-options",
   variant = 'primary'
 }: CTABannerProps) => {

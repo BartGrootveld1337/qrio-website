@@ -248,7 +248,7 @@ const About = () => {
                   href="https://app.qrioapp.nl/signup-options"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-secondary font-bold rounded-xl shadow-xl hover:shadow-2xl transition-all group"
                 >
-                  Start gratis proefperiode
+                  Start gratis
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a 

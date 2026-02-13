@@ -562,7 +562,7 @@ const Product = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">Klaar om je organisatie AI-ready te maken?</h2>
             <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-              Ervaar zelf hoe Qrio jouw team transformeert. Start vandaag nog met een gratis proefperiode of vraag een demo aan.
+              Ervaar zelf hoe Qrio jouw team transformeert. Start vandaag nog gratis of vraag een demo aan.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a 
