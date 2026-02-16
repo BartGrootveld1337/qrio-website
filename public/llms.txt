@@ -1,0 +1,82 @@
+# Qrio: AI-geletterdheid Platform
+
+> Maak je team AI-vaardig en compliant in 5 minuten per dag.
+
+Qrio is een AI-leerplatform voor organisaties. Het traint medewerkers in veilig en effectief AI-gebruik, helpt voldoen aan de EU AI Act (Artikel 4 — trainingsplicht) en verhoogt productiviteit via gamified micro-learning. Qrio combineert training, toetsing en compliance-rapportage in één platform.
+
+## Hoofdpagina's
+
+- [Home](https://www.qrioapp.nl/): Overzicht van het Qrio platform, features en pricing
+- [Product](https://www.qrioapp.nl/product): Gedetailleerde producteigenschappen en functies voor medewerkers en werkgevers
+- [Over ons](https://www.qrioapp.nl/over-ons): Missie, visie en het team achter Qrio
+- [Blogs](https://www.qrioapp.nl/blogs): Artikelen over AI-geletterdheid, EU AI Act compliance en security
+
+## Sectoroplossingen
+
+- [Bedrijfsleven](https://www.qrioapp.nl/bedrijfsleven): AI-training voor zakelijke organisaties
+- [Overheid](https://www.qrioapp.nl/overheid): AI-oplossingen voor overheidsinstellingen
+- [Onderwijs](https://www.qrioapp.nl/onderwijs): AI-geletterdheid voor onderwijsinstellingen
+- [Zorg](https://www.qrioapp.nl/zorg): AI-training voor de zorgsector
+- [EU AI Act](https://www.qrioapp.nl/ai-act): Informatie over de EU AI Act en hoe Qrio helpt bij naleving
+
+## Landingspagina's
+
+- [AI Act Scholingsplicht](https://www.qrioapp.nl/ai-act-scholingsplicht): Voldoen aan de Artikel 4 trainingsplicht van de EU AI Act
+- [AI Training Medewerkers](https://www.qrioapp.nl/ai-training-medewerkers): Effectieve AI-training voor teams en organisaties
+- [Copilot Training](https://www.qrioapp.nl/copilot-training): Microsoft Copilot training voor medewerkers
+- [ChatGPT Beleid](https://www.qrioapp.nl/chatgpt-beleid): ChatGPT-beleid opstellen voor organisaties
+- [Shadow AI Voorkomen](https://www.qrioapp.nl/shadow-ai-voorkomen): Ongeautoriseerd AI-gebruik voorkomen en beheersen
+- [App](https://www.qrioapp.nl/app): Mobiele app informatie en download
+
+## Blogartikelen
+
+### EU AI Act & Compliance
+
+- [Voldoet uw organisatie aan de trainingsplicht van Artikel 4?](https://www.qrioapp.nl/blogs/eu-ai-act-trainingsplicht-artikel-4-ai-geletterdheid): Artikel 4 van de EU AI Act vraagt om AI-geletterdheid bij personeel dat met AI werkt. Met training alleen ben je er niet — je moet ook kunnen aantonen wat mensen weten en kunnen.
+- [Een stap-voor-stap gids om AI Act-sancties te voorkomen](https://www.qrioapp.nl/blogs/ai-act-sancties-voorkomen-stappenplan): De EU AI Act introduceert boetes tot €35 miljoen of 7% van de wereldwijde jaaromzet. Met dit stappenplan breng je risico's omlaag en bouw je audit-proof bewijs op.
+- [Hoe u in 5 stappen aantoont dat uw personeel AI-geletterd is](https://www.qrioapp.nl/blogs/5-stappen-ai-geletterdheid-bewijzen): AI-geletterdheid is pas compliant als je het kunt aantonen. Met deze 5 stappen bouw je een praktisch dossier op: training, toetsing, registraties en een dashboard.
+- [De rol van de compliance officer na de AI Act](https://www.qrioapp.nl/blogs/rol-van-de-compliance-officer-na-de-ai-act): De EU AI Act verandert compliance: minder "nee zeggen", meer "mogelijk maken met bewijs". De compliance officer verschuift van controleur naar architect van governance.
+- [Hoe u met een dashboard de AI-competenties van uw team bewijst](https://www.qrioapp.nl/blogs/hoe-met-een-dashboard-de-ai-competenties-van-uw-team-bewijzen): Een AI-beleid is mooi, maar auditors willen bewijs. Met een dashboard maak je AI-competenties zichtbaar, meetbaar en exporteerbaar.
+
+### Security & Risk Management
+
+- [De 5 Grootste Datalek-Risico's die nu in uw Organisatie Verborgen zijn](https://www.qrioapp.nl/blogs/5-grootste-datalek-risicos-die-nu-in-uw-organisatie-verborgen-zijn): Medewerkers gebruiken AI-tools vaak zonder toestemming of controle. Dit is Shadow AI. Hier zijn de 5 grootste datalek-risico's en een praktisch stappenplan.
+- [Waarom een AI-Verbod niet Werkt (en wat u wél moet doen)](https://www.qrioapp.nl/blogs/waarom-een-ai-verbod-niet-werkt-en-wat-u-wel-moet-doen): ChatGPT blokkeren verplaatst AI-gebruik naar privéapparaten en maakt het onzichtbaar. Hoe je veilig AI-gebruik faciliteert met beleid, training en monitoring.
+- [Een framework voor het veilig implementeren van AI-tools](https://www.qrioapp.nl/blogs/framework-voor-veilig-implementeren-van-ai-tools): Een 5-fasen framework dat je brengt van chaos (geen zicht) naar controle (beleid, tooling, training, monitoring en continue verbetering).
+- [De CISO's gids voor AI](https://www.qrioapp.nl/blogs/de-cisos-gids-voor-ai): De beste firewall kan niet voorkomen dat iemand gevoelige data in een AI-chat plakt. Training kan dat wél. Een praktisch trainingsmodel voor CISOs.
+
+### Productiviteit & Innovatie
+
+- [De ROI van een AI-vaardige medewerker](https://www.qrioapp.nl/blogs/roi-ai-vaardige-medewerker): 30 minuten per dag tijdwinst per medewerker klinkt klein — tot je het doorrekent. Zo bouw je een businesscase voor AI-vaardigheden.
+- [Waarom de beste medewerkers een werkgever met een AI-beleid willen](https://www.qrioapp.nl/blogs/waarom-de-beste-medewerkers-ai-beleid-willen): AI is een talent-magneet: medewerkers verwachten moderne tools, training en duidelijke spelregels.
+- [Prompt Engineering voor HR: 5 templates](https://www.qrioapp.nl/blogs/prompt-engineering-voor-hr-5-templates): Met goede prompts bespaart HR tijd én verhoogt u de kwaliteit van werving, onboarding en gesprekken. 5 kant-en-klare templates.
+- [Waarom uw team wél zin heeft in een AI-training via een app](https://www.qrioapp.nl/blogs/waarom-uw-team-wel-zin-heeft-in-ai-training-via-app): Met gamification maak je leren leuk, meetbaar en blijvend — zonder dat het voelt als een verplichte cursus.
+- [Hoe teams, getraind in AI, de concurrentie voorblijven](https://www.qrioapp.nl/blogs/hoe-teams-getraind-in-ai-de-concurrentie-voorblijven): AI-tools zijn voor iedereen beschikbaar. Het echte verschil zit in vaardigheden: teams die goed getraind zijn werken sneller en maken minder fouten.
+
+## Pricing
+
+- Standaard: €3,50 per licentie/maand — Individueel gebruik, eerste module gratis, basiscursussen, prompt library en kennisbank
+- Pro for Business: €5,00 per licentie/maand — Zakelijk gebruik met geavanceerde modules, compliance rapportages, admin dashboard en uitnodigen van medewerkers (12 maanden)
+- Enterprise for Business: €7,50 per licentie/maand — Alles uit Pro plus SLA, maatwerk modules, premium support en dedicated accountmanager (12 maanden)
+
+## Kernfuncties
+
+- Gamified micro-learning: dagelijkse AI-lessen van 5 minuten met XP-punten, levels en leaderboards
+- EU AI Act compliance: voldoen aan Artikel 4 trainingsplicht met toetsing en certificering
+- Compliance dashboards: realtime voortgang, certificaat-tracking en audit-ready rapportage met 1-klik exports
+- Kennisbank: doorzoekbare AI-kennisbibliotheek met prompt templates, tool-gidsen en privacy-richtlijnen
+- Maatwerk content: eigen modules, intern AI-beleid en sectorspecifieke content toevoegen
+- 100% AVG/GDPR-compliant
+
+## Juridisch
+
+- [Privacyverklaring](https://www.qrioapp.nl/privacy)
+- [Algemene voorwaarden](https://www.qrioapp.nl/voorwaarden)
+- [Cookiebeleid](https://www.qrioapp.nl/cookies)
+- [Verwerkersovereenkomst (DPA)](https://www.qrioapp.nl/dpa)
+
+## Contact
+
+- Adres: Weldamhof 11, 3831 BH Leusden, Nederland
+- Website: https://www.qrioapp.nl
+- LinkedIn: https://www.linkedin.com/company/qrioapp

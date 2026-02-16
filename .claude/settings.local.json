@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "mcp__plugin_stripe_stripe__list_subscriptions",
-      "mcp__plugin_stripe_stripe__fetch_stripe_resources"
+      "mcp__plugin_stripe_stripe__fetch_stripe_resources",
+      "Bash(npx vite:*)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "WebFetch(domain:www.hostinger.com)",
+      "Bash(npm run build:*)"
     ]
   }
 }

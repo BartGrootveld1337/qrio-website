@@ -4,8 +4,8 @@ import TrustBanner from './components/TrustBanner';
 import Stats from './components/Stats';
 import Problem from './components/Problem';
 import Solution from './components/Solution';
+import MobileAppSection from './components/MobileAppSection';
 import Pricing from './components/Pricing';
-import CTABanner from './components/CTABanner';
 import Contact from './components/Contact';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
@@ -72,8 +72,8 @@ const LandingPage = () => {
         <Stats />
         <Problem />
         <Solution />
+        <MobileAppSection />
         <Pricing />
-        <CTABanner />
         <Contact />
         <FAQ />
       </main>
