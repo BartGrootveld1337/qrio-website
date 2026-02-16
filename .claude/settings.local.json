@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_stripe_stripe__list_subscriptions",
+      "mcp__plugin_stripe_stripe__fetch_stripe_resources"
+    ]
+  }
+}
