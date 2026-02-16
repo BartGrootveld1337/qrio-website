@@ -13,7 +13,6 @@ const Contact = () => {
     phone: '',
     company: '',
     plan: '',
-    billingCycle: '',
     estimatedLicenses: '',
     message: '',
     agreedToTerms: false
@@ -24,20 +23,15 @@ const Contact = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const planFromUrl = searchParams.get('plan');
-    const billingFromUrl = searchParams.get('billing');
     
     if (planFromUrl && ['Pro for Business', 'Enterprise for Business'].includes(planFromUrl)) {
-      setFormData(prev => ({ 
-        ...prev, 
-        plan: planFromUrl,
-        billingCycle: billingFromUrl || 'annual'
-      }));
+      setFormData(prev => ({ ...prev, plan: planFromUrl }));
     }
 
-    const handlePlanSelected = (event: CustomEvent<{ plan: string; billingCycle: string; billingLabel: string }>) => {
-      const { plan, billingCycle } = event.detail;
+    const handlePlanSelected = (event: CustomEvent<{ plan: string }>) => {
+      const { plan } = event.detail;
       if (['Pro for Business', 'Enterprise for Business'].includes(plan)) {
-        setFormData(prev => ({ ...prev, plan, billingCycle }));
+        setFormData(prev => ({ ...prev, plan }));
       }
     };
 
@@ -57,15 +51,7 @@ const Contact = () => {
     setStatus('submitting');
 
     try {
-      const billingLabels: Record<string, string> = {
-        quarterly: 'Kwartaal',
-        semiannual: 'Halfjaarlijks',
-        annual: 'Jaarlijks'
-      };
-      const billingLabel = billingLabels[formData.billingCycle] || '';
-      const planInfo = formData.plan && formData.billingCycle 
-        ? `${formData.plan} (${billingLabel})` 
-        : formData.plan || '';
+      const planInfo = formData.plan || '';
       
       // Send to both FormSubmit (email) and our edge function (database)
       const [response] = await Promise.all([
@@ -82,7 +68,6 @@ const Contact = () => {
             phone: formData.phone,
             company: formData.company,
             plan: formData.plan,
-            billingCycle: formData.billingCycle,
             estimatedLicenses: formData.estimatedLicenses,
             message: formData.message,
             planInfo,
@@ -103,7 +88,6 @@ const Contact = () => {
             email: formData.email,
             phone: formData.phone,
             plan_interest: formData.plan,
-            billing_cycle: formData.billingCycle,
             estimated_licenses: formData.estimatedLicenses ? parseInt(formData.estimatedLicenses) : null,
             message: formData.message,
             source: 'website',
@@ -115,7 +99,7 @@ const Contact = () => {
 
       if (response.ok) {
         setStatus('success');
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', billingCycle: '', estimatedLicenses: '', message: '', agreedToTerms: false });
+        setFormData({ firstName: '', lastName: '', email: '', phone: '', company: '', plan: '', estimatedLicenses: '', message: '', agreedToTerms: false });
         navigate('/bedankt');
       } else {
         console.error('Submission error:', result);
@@ -176,178 +160,154 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 relative overflow-hidden"
+            className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-100 relative overflow-hidden"
           >
             
-            <h3 className="text-2xl font-bold text-secondary mb-2">Neem Contact Op</h3>
-            <p className="text-gray-500 mb-8 text-sm">Vul het formulier in en we nemen binnen 24 uur contact met je op.</p>
+            <h3 className="text-xl font-bold text-secondary mb-1">Neem Contact Op</h3>
+            <p className="text-gray-500 mb-5 text-sm">Vul het formulier in en we nemen binnen 24 uur contact met je op.</p>
             
             {status === 'error' && (
-              <div className="mb-6 bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm">
+              <div className="mb-4 bg-red-50 border border-red-100 text-red-600 px-3 py-2 rounded-lg text-sm">
                 Er ging iets mis bij het versturen. Probeer het later opnieuw of mail ons direct op hello@qrio.nl.
               </div>
             )}
 
-            <form className="space-y-5" onSubmit={handleSubmit}>
+            <form className="space-y-3.5" onSubmit={handleSubmit}>
                 {/* Honeypot field to prevent spam */}
                 <input type="text" name="_honey" style={{ display: 'none' }} />
                 
-                <div className="grid grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label htmlFor="firstName" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Voornaam</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="firstName" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Voornaam</label>
                     <input 
                       type="text" 
                       id="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
+                      className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
                       placeholder="Jan"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label htmlFor="lastName" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Achternaam</label>
+                  <div className="space-y-1">
+                    <label htmlFor="lastName" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Achternaam</label>
                     <input 
                       type="text" 
                       id="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
+                      className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
                       placeholder="Jansen"
                     />
                   </div>
                 </div>
                 
-                <div className="space-y-1.5">
-                  <label htmlFor="email" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Zakelijk E-mailadres</label>
-                  <input 
-                    type="email" 
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
-                    placeholder="jan@bedrijf.nl"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="phone" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Telefoonnummer</label>
-                  <input 
-                    type="tel" 
-                    id="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
-                    placeholder="06 12345678"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="company" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Bedrijfsnaam</label>
-                  <input 
-                    type="text" 
-                    id="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
-                    placeholder="Bedrijf B.V."
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="plan" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Interesse in plan</label>
-                  <div className="relative">
-                    <select
-                      id="plan"
-                      value={formData.plan}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="email" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Zakelijk e-mail</label>
+                    <input 
+                      type="email" 
+                      id="email"
+                      value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
-                    >
-                      <option value="">Selecteer een plan</option>
-                      <option value="Pro for Business">Pro for Business</option>
-                      <option value="Enterprise for Business">Enterprise for Business</option>
-                      <option value="Demo">Ik wil eerst een demo</option>
-                      <option value="Overig">Overige vraag</option>
-                    </select>
-                    <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                      required
+                      className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
+                      placeholder="jan@bedrijf.nl"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label htmlFor="phone" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Telefoon</label>
+                    <input 
+                      type="tel" 
+                      id="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
+                      placeholder="06 12345678"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label htmlFor="company" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Bedrijfsnaam</label>
+                    <input 
+                      type="text" 
+                      id="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
+                      placeholder="Bedrijf B.V."
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label htmlFor="plan" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Interesse in</label>
+                    <div className="relative">
+                      <select
+                        id="plan"
+                        value={formData.plan}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer text-sm"
+                      >
+                        <option value="">Selecteer een plan</option>
+                        <option value="Pro for Business">Pro for Business</option>
+                        <option value="Enterprise for Business">Enterprise for Business</option>
+                        <option value="Demo">Ik wil eerst een demo</option>
+                        <option value="Overig">Overige vraag</option>
+                      </select>
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    </div>
                   </div>
                 </div>
 
                 {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && (
-                  <>
-                    <div className="space-y-1.5">
-                      <label htmlFor="billingCycle" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Gewenste facturatiecyclus</label>
-                      <div className="relative">
-                        <select
-                          id="billingCycle"
-                          value={formData.billingCycle}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 appearance-none cursor-pointer"
-                        >
-                          <option value="">Selecteer facturatiecyclus</option>
-                          <option value="quarterly">Per kwartaal</option>
-                          <option value="semiannual">Halfjaarlijks</option>
-                          <option value="annual">Jaarlijks</option>
-                        </select>
-                        <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="estimatedLicenses" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Geschat aantal licenties</label>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 space-y-1">
+                      <label htmlFor="estimatedLicenses" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Aantal licenties</label>
                       <input
                         type="number"
                         id="estimatedLicenses"
                         min="1"
                         value={formData.estimatedLicenses}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200"
+                        className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 text-sm"
                         placeholder="Bijv. 25"
                       />
                     </div>
-                  </>
-                )}
-
-                {formData.plan && !['Overig', 'Demo'].includes(formData.plan) && formData.billingCycle && (
-                  <div className="flex items-center gap-2 px-3 py-2 bg-primary/5 rounded-lg border border-primary/20">
-                    {formData.plan.includes('Pro') ? <Sparkles size={14} className="text-primary" /> : 
-                     <Building2 size={14} className="text-primary" />}
-                    <span className="text-sm text-primary font-medium">
-                      {formData.plan} &mdash; {
-                        formData.billingCycle === 'quarterly' ? 'Per kwartaal' :
-                        formData.billingCycle === 'semiannual' ? 'Halfjaarlijks' :
-                        'Jaarlijks'
-                      }
-                      {formData.estimatedLicenses ? ` — ${formData.estimatedLicenses} licenties` : ''}
-                    </span>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-primary/5 rounded-md border border-primary/20 mt-5">
+                      {formData.plan.includes('Pro') ? <Sparkles size={12} className="text-primary" /> : 
+                       <Building2 size={12} className="text-primary" />}
+                      <span className="text-xs text-primary font-medium whitespace-nowrap">
+                        {formData.plan}
+                      </span>
+                    </div>
                   </div>
                 )}
 
-                <div className="space-y-1.5">
-                  <label htmlFor="message" className="text-xs font-bold text-gray-500 uppercase tracking-wider">Bericht (Optioneel)</label>
+                <div className="space-y-1">
+                  <label htmlFor="message" className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Bericht (optioneel)</label>
                   <textarea 
                     id="message"
                     value={formData.message}
                     onChange={handleChange}
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 resize-none"
+                    rows={3}
+                    className="w-full px-3 py-2.5 rounded-lg bg-gray-50 border border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all duration-200 resize-none text-sm"
                     placeholder="Ik wil graag meer weten over..."
                   ></textarea>
                 </div>
 
-                <div className="flex items-start gap-3">
+                <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     id="agreedToTerms"
                     checked={formData.agreedToTerms}
                     onChange={(e) => setFormData({ ...formData, agreedToTerms: e.target.checked })}
                     required
-                    className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20"
+                    className="h-3.5 w-3.5 rounded border-gray-300 text-primary focus:ring-primary/20"
                   />
-                  <label htmlFor="agreedToTerms" className="text-xs text-gray-500">
+                  <label htmlFor="agreedToTerms" className="text-[11px] text-gray-400">
                     Ik ga akkoord met de{' '}
                     <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">algemene voorwaarden</a>
                   </label>
@@ -356,16 +316,16 @@ const Contact = () => {
                 <button 
                   type="submit" 
                   disabled={status === 'submitting' || !formData.agreedToTerms}
-                  className="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-primary/90 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 shadow-lg shadow-primary/25 mt-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none focus:ring-4 focus:ring-primary/50 focus:outline-none"
+                  className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primary/90 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 shadow-lg shadow-primary/25 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none focus:ring-4 focus:ring-primary/50 focus:outline-none text-sm"
                 >
                   {status === 'submitting' ? (
                     <>
-                      <Loader2 size={18} className="animate-spin" />
+                      <Loader2 size={16} className="animate-spin" />
                       Versturen...
                     </>
                   ) : (
                     <>
-                      <Send size={18} />
+                      <Send size={16} />
                       Verstuur aanvraag
                     </>
                   )}

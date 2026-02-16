@@ -1,7 +1,5 @@
 import { Users, Sparkles, Building2 } from 'lucide-react';
 
-export type BillingCycle = 'monthly' | 'quarterly' | 'semiannual' | 'annual';
-
 export interface Plan {
   id: string;
   name: string;
@@ -9,8 +7,10 @@ export interface Plan {
   subtitle: string;
   description: string;
   billingType: 'individual' | 'business';
-  price: Record<BillingCycle, number>;
+  price: number;
   priceDetail: string;
+  billingCycle: 'monthly' | 'annual';
+  commitment: string;
   features: string[];
   cta: string;
   ctaType: 'signup' | 'contact_form';
@@ -29,13 +29,10 @@ export const pricingPlans: Plan[] = [
     subtitle: 'Voor individueel gebruik',
     description: "Word AI-vaardig op je eigen tempo. Leer de basis van veilig en effectief AI-gebruik.",
     billingType: 'individual',
-    price: {
-      monthly: 3.50,
-      quarterly: 3.50,
-      semiannual: 3.50,
-      annual: 3.50
-    },
+    price: 3.50,
     priceDetail: "per licentie / maand",
+    billingCycle: 'monthly',
+    commitment: 'Geen',
     features: [
       "Eerste module gratis",
       "Toegang tot basiscursussen",
@@ -58,13 +55,10 @@ export const pricingPlans: Plan[] = [
     subtitle: 'Voor zakelijk gebruik',
     description: "Maak AI-gebruik slimmer, veiliger en meetbaar binnen je organisatie.",
     billingType: 'business',
-    price: {
-      monthly: 5.00,
-      quarterly: 4.75,
-      semiannual: 4.75,
-      annual: 4.50
-    },
+    price: 5.00,
     priceDetail: "per licentie / maand",
+    billingCycle: 'annual',
+    commitment: '12 maanden',
     features: [
       "Alles uit Standaard",
       "Verdiepende modules",
@@ -86,13 +80,10 @@ export const pricingPlans: Plan[] = [
     subtitle: 'Voor zakelijk gebruik',
     description: "Voor organisaties die AI-geletterdheid aantoonbaar en op maat willen maken.",
     billingType: 'business',
-    price: {
-      monthly: 7.50,
-      quarterly: 7.13,
-      semiannual: 7.13,
-      annual: 6.75
-    },
+    price: 7.50,
     priceDetail: "per licentie / maand",
+    billingCycle: 'annual',
+    commitment: '12 maanden',
     features: [
       "Alles uit Pro for Business",
       "SLA",
